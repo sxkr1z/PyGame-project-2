@@ -8,7 +8,7 @@ pg.init()
 clock = pg.time.Clock()
 SIZE = WIDTH, HEIGHT = 789, 500
 screen = pg.display.set_mode(SIZE)
-pg.display.set_caption('Десант')
+pg.display.set_caption('Aim Training')
 BACKGROUND = pg.Color('#7fc7ff')
 FPS = 60
 SPEED = 200
