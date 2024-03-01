@@ -34,7 +34,7 @@ def load_image(name: str,
 
 
 class Mountain(pg.sprite.Sprite):
-    image = load_image("mountains.png")
+    image = load_image("grass.png")
     mask = pg.mask.from_surface(image)
 
     def __init__(self):
@@ -50,7 +50,7 @@ mountain = Mountain()
 
 class Landing(pg.sprite.Sprite):
     image = load_image("pt.png")
-    image_boom = load_image("img.png")
+    image_boom = load_image("bbom.png")
 
     def __init__(self):
         super().__init__(all_sprites)
@@ -65,9 +65,10 @@ class Landing(pg.sprite.Sprite):
     def update(self, *args):
         if not pg.sprite.collide_mask(self, mountain):
             self.rect = self.rect.move(0, 1)
+        else:
+            self.kill()
         if args and args[0].type == pg.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             self.image = self.image_boom
-            all_sprites.update(event)
 
 
 def time_land():
@@ -81,6 +82,8 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+        if event.type == pg.MOUSEBUTTONDOWN:
+            all_sprites.update(event)
 
     screen.fill(BACKGROUND)
     all_sprites.update()
