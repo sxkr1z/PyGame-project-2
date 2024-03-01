@@ -5,15 +5,19 @@ from threading import Timer
 import pygame as pg
 
 pg.init()
+pg.font.init()
+running = True
+
+score = 0
 clock = pg.time.Clock()
-SIZE = WIDTH, HEIGHT = 780, 500
-screen = pg.display.set_mode(SIZE)
-pg.display.set_caption('Aim Training')
+
 BACKGROUND = pg.Color('#7fc7ff')
+SIZE = WIDTH, HEIGHT = 780, 500
 FPS = 60
 SPEED = 200
 
-running = True
+screen = pg.display.set_mode(SIZE)
+pg.display.set_caption('Aim Training')
 
 
 def load_image(name: str,
@@ -48,44 +52,47 @@ all_sprites = pg.sprite.Group()
 grass = Grass()
 
 
-class Landing(pg.sprite.Sprite):
-    image = load_image("pt.png")
-    image_boom = load_image("bbom.png")
+class Star(pg.sprite.Sprite):
+    global score
+    image = load_image("star.png")
+    image_bboom = load_image("bbom.png")
 
     def __init__(self):
         super().__init__(all_sprites)
-        self.image = Landing.image
+        self.image = Star.image
         self.rect = self.image.get_rect()
-
         self.mask = pg.mask.from_surface(self.image)
-
         self.rect.x = random.randrange(WIDTH - 45)
         self.rect.y = random.randint(-300, 100)
 
     def update(self, *args):
+        global score
         if not pg.sprite.collide_mask(self, grass):
             self.rect = self.rect.move(0, 1)
         else:
             self.kill()
         if args and args[0].type == pg.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            self.image = self.image_boom
+            self.image = self.image_bboom
+            score += 1
 
 
-def time_land():
-    Landing()
-    Timer(1, time_land).start()
+def time_star():
+    Star()
+    Timer(1, time_star).start()
 
 
-time_land()
+time_star()
 
 while running:
+    font = pg.font.Font("data/impact2.ttf", 30)
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
         if event.type == pg.MOUSEBUTTONDOWN:
             all_sprites.update(event)
-
     screen.fill(BACKGROUND)
+    score_text = font.render(str(score), True, (255, 255, 255))
+    screen.blit(score_text, (10, 10))
     all_sprites.update()
     all_sprites.draw(screen)
     pg.display.flip()
