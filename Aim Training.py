@@ -6,7 +6,7 @@ import pygame as pg
 
 pg.init()
 clock = pg.time.Clock()
-SIZE = WIDTH, HEIGHT = 789, 500
+SIZE = WIDTH, HEIGHT = 780, 500
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption('Aim Training')
 BACKGROUND = pg.Color('#7fc7ff')
@@ -33,19 +33,19 @@ def load_image(name: str,
     return image
 
 
-class Mountain(pg.sprite.Sprite):
+class Grass(pg.sprite.Sprite):
     image = load_image("grass.png")
     mask = pg.mask.from_surface(image)
 
     def __init__(self):
         super().__init__(all_sprites)
-        self.image = Mountain.image
+        self.image = Grass.image
         self.rect = self.image.get_rect()
         self.rect.bottom = HEIGHT
 
 
 all_sprites = pg.sprite.Group()
-mountain = Mountain()
+grass = Grass()
 
 
 class Landing(pg.sprite.Sprite):
@@ -63,7 +63,7 @@ class Landing(pg.sprite.Sprite):
         self.rect.y = random.randint(-300, 100)
 
     def update(self, *args):
-        if not pg.sprite.collide_mask(self, mountain):
+        if not pg.sprite.collide_mask(self, grass):
             self.rect = self.rect.move(0, 1)
         else:
             self.kill()
